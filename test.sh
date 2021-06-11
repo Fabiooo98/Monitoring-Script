@@ -20,4 +20,13 @@ if [ ! -f "$DIR/$FILE_NAME.txt" ]
 then
     touch "$FILE_NAME.txt"
 fi
+# insert CPU in file for 10 seoncds
+x=1
+while [ $x -le 10 ]
+do
+    echo `top -b -n1 | grep "Cpu(s)" | awk '{print $2 + $4}'` >> "$FILE_NAME.txt"
+    x=$(( $x + 1 ))
+    sleep 1
+done
+pwd
 exit 0
