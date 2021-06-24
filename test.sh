@@ -26,9 +26,14 @@ echo 'time,cpu_usage_pct,ram_usage_pct,network_in,network_out' >> "$FILE_NAME.cs
 x=1
 while [ $x -le 10 ]
 do
-    echo "`date +'%T'`,`top -b -n1 | grep "Cpu(s)" | awk '{print $2 + $4}'`,`free | grep Mem | awk '{print $3/$2}'`,`ifstat -i eth0 -q 1 1 | sed -n '3 p' | awk '{print $1","$2}'`" >> "$FILE_NAME.csv"
+    printf `date +'%T'";"` >> "$FILE_NAME.csv"
+    printf `top -b -n1 | grep "Cpu(s)" | awk '{print $2 + $4}'`";" >> "$FILE_NAME.csv"
+    printf `free | grep Mem | awk '{print $3/$2}'`";" >> "$FILE_NAME.csv"
+    printf `ifstat -i eth0 -q 1 1 | sed -n '3 p' | awk 'OFS=";" {print $1,$2}'` >> "$FILE_NAME.csv"
+    printf "\n" >> "$FILE_NAME.csv"
+    #up counter and wait 5 seconds
     x=$(( $x + 1 ))
-    sleep 1
+    sleep 5
 done
 pwd
 exit 0
