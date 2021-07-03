@@ -67,7 +67,7 @@ do
     cpu=$(echo `top -b -n1 | grep "Cpu(s)" | awk '{print $2 + $4}'`)
     mem=$(echo `free | grep Mem | awk '{print $3/$2}'`)
     network=$(echo `ifstat -i eth0 -q 1 1 | sed -n '3 p' | awk 'OFS=";" {print $1,$2}'`)
-    hpc=$(cat "$TEMP_OUTPUT" | tr -s " " | cut -d " " -f 2 | tail -n 2 | head -n 1| tr "," ".")
+    hpc=$(cat "$TEMP_OUTPUT" | cut -c -20 | tr -s " " | tail -n +6 | head -n -3 | tr "\n" "," | sed 's/ //g'| sed 's/.$//')
     ##############################################################
 	#############			   OUTPUT				##############
 	##############################################################
