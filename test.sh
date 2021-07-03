@@ -50,7 +50,7 @@ TEMP_OUTPUT=temp
 perf stat -e "$EVENTS" --o "$TEMP_OUTPUT" -a sleep 1
 placeholder=$(cat $TEMP_OUTPUT | cut -b 25- | cut -d " " -f 1 | tail -n +6 | head -n -3 | tr "\n" "," | sed 's/.$//')
 # header line in file
-echo "time;cpu_usage_pct;ram_usage_pct;network_in;network_out;${placeholder}" >> $FINAL_OUTPUT
+echo "time,cpu_usage_pct,ram_usage_pct,network_in,network_out,${placeholder}" >> $FINAL_OUTPUT
 ##############################################################
 #############		   MONITORING LOOP			##############
 ##############################################################
@@ -66,12 +66,12 @@ do
     timestamp=$(echo `date +'%T'`)
     cpu=$(echo `top -b -n1 | grep "Cpu(s)" | awk '{print $2 + $4}'`)
     mem=$(echo `free | grep Mem | awk '{print $3/$2}'`)
-    network=$(echo `ifstat -i eth0 -q 1 1 | sed -n '3 p' | awk 'OFS=";" {print $1,$2}'`)
+    network=$(echo `ifstat -i eth0 -q 1 1 | sed -n '3 p' | awk 'OFS="," {print $1,$2}'`)
     hpc=$(cat "$TEMP_OUTPUT" | cut -c -20 | tr -s " " | tail -n +6 | head -n -3 | tr "\n" "," | sed 's/ //g'| sed 's/.$//')
     ##############################################################
 	#############			   OUTPUT				##############
 	##############################################################
-    echo "$timestamp;$cpu;$mem;$network;$hpc" >> $FINAL_OUTPUT
+    echo "$timestamp,$cpu,$mem,$network,$hpc" >> $FINAL_OUTPUT
     #up counter and wait
     x=$(( $x + 1 ))
 done
