@@ -4,14 +4,9 @@
 ##############################################################
 # Set language to make sure same separator (, and .) config is being used
 export LC_ALL=C.UTF-8
-# Move to home directory
-cd
 # setup variables and arguments
-while getopts ":f:n:a:t:" opt; do
+while getopts ":f:a:t:" opt; do
   case $opt in
-    n)
-    DIR_NAME=$OPTARG
-    ;;
     a)
     SAMPLES=$OPTARG
     ;;
@@ -23,11 +18,6 @@ while getopts ":f:n:a:t:" opt; do
   esac
 done
 # check if arguments are given, if not set default values
-# Name of the target directory
-if [ -z "$DIR_NAME" ]
-then
-    DIR_NAME='default_DIR'
-fi
 # Amount of samples to be taken
 if [ -z "$SAMPLES" ]
 then
@@ -43,21 +33,16 @@ if [ -z "$TIME" ]
 then
     TIME=10
 fi
-# check if directory exists, if not then create it
-if [ ! -d "$DIR_NAME" ]
-then
-    mkdir $DIR_NAME
-fi
 # List of events to monitor using perf
 EVENTS=""
-# Enter target directory
-cd $DIR_NAME
 # check if file exists, if not then create it
-if [ ! -f "$DIR/$FILE_NAME.csv" ]
+if [ ! -f "$FILE_NAME.csv" ]
 then
     # Create the file
     touch "$FILE_NAME.csv"
 fi
+FINAL_OUTPUT="$FILE_NAME.csv"
+TEMP_OUTPUT=temp
 ##############################################################
 #############		  OUTPUT FORMATTING  		##############
 ##############################################################
@@ -65,7 +50,7 @@ fi
 perf stat -e "$EVENTS" --o "$TEMP_OUTPUT" -a sleep 1
 placeholder=$(cat $TEMP_OUTPUT | cut -b 25- | cut -d " " -f 1 | tail -n +6 | head -n -3 | tr "\n" "," | sed 's/.$//')
 # header line in file
-echo "time;cpu_usage_pct;ram_usage_pct;network_in;network_out;${placeholder}" >> "$FILE_NAME.csv"
+echo "time;cpu_usage_pct;ram_usage_pct;network_in;network_out;${placeholder}" >> $FINAL_OUTPUT
 ##############################################################
 #############		   MONITORING LOOP			##############
 ##############################################################
@@ -86,7 +71,7 @@ do
     ##############################################################
 	#############			   OUTPUT				##############
 	##############################################################
-    echo "$timestamp;$cpu;$mem;$network;$hpc" >> "$FILE_NAME.csv"
+    echo "$timestamp;$cpu;$mem;$network;$hpc" >> $FINAL_OUTPUT
     #up counter and wait
     x=$(( $x + 1 ))
 done
