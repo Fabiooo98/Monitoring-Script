@@ -24,7 +24,7 @@ while getopts ":f:a:t:h" opt; do
     echo "The following arguments can be given: -a | -f | -t"
     echo ""
     echo "Options:"
-    echo "-a        To set the amounf of samples to be taken. Default is 10 samples."
+    echo "-a        To set the amount of samples to be taken. Default is 10 samples."
     echo "-f        To name the output file. Default is 'data'."
     echo "-t        To set the time between samples (in seconds). Default is 10 seconds."
     exit 0
