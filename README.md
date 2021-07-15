@@ -1,6 +1,5 @@
 # Monitoring-Script
-
-This repository is used for my bachelor thesis.
+This script is designed to monitor the internal behavior of a Raspberry Pi single circuit computer. It collects 72 events, containing resource usage metrics and tracepoint events. The output of the finished script is a csv file containing the collected data.
 ## Prerequisites
 `ifstat` needs to be installed on the target device.
 
