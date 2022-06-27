@@ -18,9 +18,7 @@ The script can be executed via the following command:
 `[-t]` Will specify the amount of time between measurements in seconds. The default value is 10 seconds.
 
 
-`bash script.sh -h`
-
-Will output the aforementioned usage instructions.
+`bash script.sh -h` Will output the aforementioned usage instructions.
 
 ## Output
 The collected data will be saved in `.csv` file in the same directory as the script itself. The name of said output file can be customized using the `[-f]` argument.
